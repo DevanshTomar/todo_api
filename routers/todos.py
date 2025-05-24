@@ -23,8 +23,8 @@ class TodoRequest(BaseModel):
     priority: int = Field(gt=0, lt=6)
     complete: bool 
 
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "title": "Example title",
                 "description": "Example description",
@@ -32,7 +32,7 @@ class TodoRequest(BaseModel):
                 "complete": False
             }
         }
-    
+    }
 
 @router.get('/', status_code=status.HTTP_200_OK)
 def read_all(db: db_dependency):
