@@ -27,8 +27,8 @@ class TodoRequest(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "title": "Todo title",
-                "description": "Todo description",
+                "title": "Example title",
+                "description": "Example description",
                 "priority": 1,
                 "complete": False
             }
