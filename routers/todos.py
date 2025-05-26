@@ -6,7 +6,9 @@ from typing import Annotated
 from sqlalchemy.orm import Session
 from .auth import get_current_user
 
-router = APIRouter()
+router = APIRouter(
+    tags=["todos"],
+)
   
 def get_db():
     db = SessionLocal()
@@ -93,5 +95,5 @@ async def delete_todo(db: db_dependency, user: user_dependency, todo_id: int = P
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found")
 
     db.query(Todos).filter(Todos.id == todo_id).filter(Todos.owner_id == user.get("user_id")).delete(synchronize_session=False)
-    
+
     db.commit()
