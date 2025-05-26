@@ -32,15 +32,6 @@ def read_all(db: db_dependency, user: user_dependency):
     
     return db.query(Todos).all()
 
-@router.get('/users', status_code=status.HTTP_200_OK)
-def read_all_users(db: db_dependency, user: user_dependency):
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
-    
-    if user.get("role").casefold() != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User not authorized")
-    
-    return db.query(Users).all()
 
 
 @router.delete('/todos/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
