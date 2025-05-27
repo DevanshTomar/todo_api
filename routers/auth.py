@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from starlette import status
 from database import SessionLocal
 from models import Users
@@ -79,16 +79,18 @@ class CreateUserRequest(BaseModel):
     last_name: str
     password: str
     role: str
+    phone_number: str = Field(min_length=10, max_length=15, is_required=True)
 
     model_config = {
         "json_schema_extra": {
             "example": {
-                "username": "testuser",
+                "username": "testuser", 
                 "email": "testuser@example.com",
                 "first_name": "Test",
                 "last_name": "User",
                 "password": "testpassword",
-                "role": "user"
+                "role": "user",
+                "phone_number": "1234567890"
             }
         }
     }
@@ -116,7 +118,8 @@ async def create_user(db: db_dependency, create_user_request: CreateUserRequest)
         last_name = create_user_request.last_name,
         hashed_password = bcrypt_context.hash(create_user_request.password),
         role = create_user_request.role,
-        is_active = True
+        is_active = True,
+        phone_number = create_user_request.phone_number
     )
 
     db.add(create_user_model)
