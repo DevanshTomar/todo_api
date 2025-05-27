@@ -16,12 +16,13 @@ A robust, modular, and secure Todo API built with FastAPI and SQLAlchemy. This p
 
 ## Tech Stack
 
-- **Framework**: FastAPI
-- **ORM**: SQLAlchemy
+- **Framework**: FastAPI 0.115.12
+- **ORM**: SQLAlchemy 2.0.28
 - **Database**: Configurable via `.env` (e.g., PostgreSQL, SQLite, etc.)
-- **Authentication**: JWT, Passlib (bcrypt)
+- **Authentication**: JWT (python-jose), Passlib (bcrypt)
+- **Migration**: Alembic 1.16.1
 - **Environment**: Python 3.10+
-- **Other**: Pydantic, python-dotenv
+- **Other**: Pydantic 2.6.3, python-dotenv 1.1.0, uvicorn 0.34.2
 
 ---
 
@@ -37,6 +38,10 @@ A robust, modular, and secure Todo API built with FastAPI and SQLAlchemy. This p
 │   ├── todos.py         # CRUD endpoints for todos
 │   ├── users.py         # User profile and password management
 │   └── admin.py         # (Optional) Admin endpoints
+├── alembic/             # Database migration files
+│   ├── versions/        # Migration version scripts
+│   └── env.py           # Alembic environment configuration
+├── alembic.ini          # Alembic configuration file
 ├── .env                 # Environment variables (DB connection, secrets)
 ├── .gitignore           # Git ignore rules
 └── README.md            # Project documentation
@@ -59,10 +64,21 @@ A robust, modular, and secure Todo API built with FastAPI and SQLAlchemy. This p
    ```
 
 3. **Install dependencies:**
-   *(Create a `requirements.txt` if not present, with FastAPI, SQLAlchemy, python-dotenv, passlib[bcrypt], pydantic, and uvicorn)*
    ```bash
-   pip install fastapi sqlalchemy python-dotenv passlib[bcrypt] pydantic uvicorn
+   pip install -r requirements.txt
    ```
+   
+   The requirements include:
+   - fastapi==0.115.12
+   - uvicorn==0.34.2
+   - sqlalchemy==2.0.28
+   - python-dotenv==1.1.0
+   - pydantic==2.6.3
+   - alembic==1.16.1
+   - python-jose[cryptography]==3.3.0
+   - passlib[bcrypt]==1.7.4
+   - starlette==0.46.2
+   - typing-extensions==4.13.2
 
 4. **Configure environment variables:**
    - Copy `.env.example` to `.env` and fill in your database URL and any secrets.
@@ -71,10 +87,14 @@ A robust, modular, and secure Todo API built with FastAPI and SQLAlchemy. This p
      DATABASE_URL=sqlite:///./test.db
      SECRET_KEY=your_secret_key
      ALGORITHM=HS256
-     ACCESS_TOKEN_EXPIRE_MINUTES=30
      ```
 
-5. **Run the application:**
+5. **Run database migrations:**
+   ```bash
+   alembic upgrade head
+   ```
+
+6. **Run the application:**
    ```bash
    uvicorn main:app --reload
    ```
@@ -112,6 +132,7 @@ A robust, modular, and secure Todo API built with FastAPI and SQLAlchemy. This p
 - `hashed_password`: String (bcrypt hashed)
 - `is_active`: Boolean
 - `role`: String (for future role-based access)
+- `phone_number`: String
 
 ### Todos
 - `id`: Integer, primary key
