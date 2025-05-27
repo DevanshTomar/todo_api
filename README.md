@@ -119,6 +119,7 @@ A robust, modular, and secure Todo API built with FastAPI and SQLAlchemy. This p
 ### Users
 - `GET /users/` — Get current user profile
 - `PUT /users/password` — Change password
+- `PUT /users/phone` — Change phone number
 
 ---
 
